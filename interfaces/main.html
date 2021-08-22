@@ -1,0 +1,12 @@
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<script>
+const rpcURL = 'https://rinkeby.infura.io/v3/49775e1c3d3a4851b61602c4af9c56d6'
+// const Web3 = require('web3')
+const web3 = new Web3(rpcURL)
+
+const abi = [{"name": "DataChange", "inputs": [{"name": "setter", "type": "address", "indexed": true}, {"name": "value", "type": "uint256", "indexed": false}], "anonymous": false, "type": "event"}, {"stateMutability": "nonpayable", "type": "constructor", "inputs": [{"name": "_x", "type": "uint256"}], "outputs": []}, {"stateMutability": "nonpayable", "type": "function", "name": "set", "inputs": [{"name": "new_value", "type": "uint256"}], "outputs": [], "gas": 37090}, {"stateMutability": "view", "type": "function", "name": "get", "inputs": [{"name": "user", "type": "address"}], "outputs": [{"name": "", "type": "uint256"}], "gas": 2633}, {"stateMutability": "view", "type": "function", "name": "stored_data", "inputs": [{"name": "arg0", "type": "address"}], "outputs": [{"name": "", "type": "uint256"}], "gas": 2663}]
+const address = '0xa26b2a9ac0fd13a211f484119ebdd14994892759'
+const contract = new web3.eth.Contract(abi, address)
+contract.methods.get('0x7e583bf0284c1830ff38a3b18c2eca497d34b687').call((err, result) => {
+  console.log(result) })
+</script>
