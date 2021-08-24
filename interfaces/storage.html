@@ -1,0 +1,45 @@
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<script>
+const rpcURL = 'http://127.0.0.1:8545'
+// const Web3 = require('web3')
+const web3 = new Web3(rpcURL)
+
+const account = '0x3C4Ad7B6B2644606f26Ee96A13D6986e83D76a39'
+
+const run = async function() {
+  $.getJSON("../build/deployments/map.json", data => {
+    for (const [id, deployments] of Object.entries(data)) {
+      const address = deployments.storage[deployments.storage.length - 1];
+      const contractJson = `../build/deployments/${id}/${address}.json`;
+      $.getJSON(contractJson, data => {
+        const contract = new web3.eth.Contract(data.abi, address)
+
+        contract.methods.get().call((err, result) => {
+          if (!err) {
+            console.log(result);
+            contract.methods.set(88).send({from: account}, (err, result) => {
+              if (!err) {
+                contract.methods.get().call((err, result) => {
+                  if (!err) {
+                    console.log(result);
+                  } else {
+                    console.error(err);
+                  }
+                })
+              } else {
+                console.error(err);
+              }
+            });
+          } else {
+            console.error(err);
+          }
+        });
+      })
+    }
+  })
+}
+
+run()
+
+</script>
