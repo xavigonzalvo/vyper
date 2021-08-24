@@ -20,7 +20,7 @@ Add the private network alias:
 
 Deploy contract locally:
 
-    brownie run deploy --network private
+    brownie run <deploy_script> --network private
 
 Start a server in order to execute the interfaces:
 
