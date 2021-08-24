@@ -5,9 +5,7 @@ const rpcURL = 'http://127.0.0.1:8545'
 // const Web3 = require('web3')
 const web3 = new Web3(rpcURL)
 
-const account = '0x3C4Ad7B6B2644606f26Ee96A13D6986e83D76a39'
-
-const run = async function() {
+const run = async function(account) {
   $.getJSON("../build/deployments/map.json", data => {
     for (const [id, deployments] of Object.entries(data)) {
       const address = deployments.storage[deployments.storage.length - 1];
@@ -40,6 +38,6 @@ const run = async function() {
   })
 }
 
-run()
+web3.eth.getAccounts().then((accounts) => {run(accounts[0]);});
 
 </script>
