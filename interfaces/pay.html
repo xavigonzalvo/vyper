@@ -4,11 +4,18 @@
 </head>
 <body>
   <div>
+    <p>Storage</p>
     <p>Current address: <span id="currentAddress">0x0</span></p>
     <p>Value: <span id="currentValue">None</span></p>
     <button id="getValue">Get value</button>
     <p>New value: <input id="newValue" type="text"></input></p>
     <button id="setValue">Set value</button>
+  </div>
+  <div>
+    <p>Payment</p>
+    <p>Pay ammount: <input id="payAmount" type="text"></input></p>
+    <p>To: <input id="toAddress" type="text" value="0x1eAedFD3E0bc88Bd4A6232D36888045EFBcB7e96"></input></p>
+    <button id="pay">Pay</button>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -53,10 +60,13 @@
             console.log(error);
           }
           var account = accounts[0];
+          // Storage.
           $('#currentAddress').text(account);
           App.get();
           $(document).on('click', '#getValue', App.get);
           $(document).on('click', '#setValue', App.set);
+          // Payment.
+          $(document).on('click', '#pay', App.pay);
         })
       },
       get: function(event) {
@@ -78,6 +88,23 @@
           var account = accounts[0];
           const newValue = $('#newValue').val();
           App.contracts.Pay.methods.set(newValue).send({from: account}, (err, result) => {
+            if (err) {
+              console.error(err);
+            }
+          })
+        })
+      },
+      pay: function() {
+        web3.eth.getAccounts(function(error, accounts) {
+          if (error) {
+            console.log(error);
+          }
+          var account = accounts[0];
+          const amount = $('#payAmount').val();
+          const toAddress = $('#toAddress').val();
+          App.contracts.Pay.methods.pay(toAddress).send(
+              {from: account,
+               value: web3.utils.toWei(amount, 'ether')}, (err, result) => {
             if (err) {
               console.error(err);
             }
